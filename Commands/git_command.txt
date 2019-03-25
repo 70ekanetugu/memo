@@ -9,6 +9,9 @@
 ７．共有リポジトリへ              "git push origin master"
      --->username & passwordの入力
 
+※pushして"denied"になるようであれば、以下のようにユーザー+パスワード設定をしてみる。
+>$ git remote set-url origin https://ユーザー名:パスワード@github.com/ユーザー名/リポジトリ名.git
+
 
 [基本コマンド]
 ・git --help　
@@ -40,11 +43,54 @@
 ・git diff
 	->変更差分の表示
 
+・git remote [オプション]
+	[オプション]
+	-v :　リモートリポジトリの設定を表示
+
 ・git remote add "origin" "リモートリポジトリURL"
 	->リモートリポジトリを登録する。(エイリアス)
 	　エイリアス名は何でもいいが、originにするのが一般的。
 　　　　　URLはGitHub上で作成したリポジトリのURL。
 
+・git remote set-url origin [リモートURL] 　　
+	->リモートのURLをセットまたは変更
+
+・git branch [オプション]
+	->ローカルブランチの一覧を表示する。
+	[オプション]
+	-r : リモートブランチの一覧を表示する
+	-a : リモートを含んだすべてのブランチ
+
 ・git push　origin "master / branch"
 	->リモートリポジトリにファイルを追加する。
 　　　　　追加するファイルは現在いるローカルリポジトリのもの。
+
+・git pull
+	->fetch＋mergeをする。指定なければ登録したリポジトリ。
+
+・git fetch
+	->リモートからフェッチする。トラッキングブランチの取得。
+
+・git merge
+	->トラッキングブランチをローカルブランチにマージする。
+		
+・git checkout ブランチ名
+	->指定したブランチ名を作業ツリーに持ってくる。
+　　　　　要は、指定したブランチに切り替える。
+
+・git config [オプション] [対象項目]
+	->gitのconfigファイル読み込み。
+	[対象項目]
+	・user.name
+	・user.email
+	[オプション]
+	-l :リスト表示
+
+・git reset [オプション]
+	->ワーキングツリー及び、ローカルリポジトリの変更を戻す。
+	[オプション]
+	--hard : commit(HEADの位置),add（ステージング),ファイルの変更もすべて変更前に戻す。
+	--mixed: commit(HEADの位置),add(ステージング)を取り消す。(ファイルだけは最新の状態)
+	--soft : commitのみ取り消す。
+	
+　
