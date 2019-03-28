@@ -6,7 +6,7 @@
 <dl>
 
 <dt>1. Linux</dt>  
-  <dd>* コマンド集  </dd> 　
+  <dd>  * コマンド集  </dd> 　
 2. Git  
   * 基本フロー及びコマンド集
 3. Docker  
