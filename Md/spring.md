@@ -1,9 +1,11 @@
 # Springメモ
 
 ## Bean定義
-bean定義はいくつか方法があるが、一般的にはxml,Java Config,LDAPなどがある。
+spring bootでは設定ファイルなしでも動くが、規模大きい場合はxmlで書いている。xmlの読み込みは、mainメソッドがあるクラスで以下のｱﾉﾃｰｼｮﾝをつける。これで、起動時に設定が読み込まれる。
+- @Configuration
+- @ImportResource("xmlファイル名")
 
-spring bootでは設定不要なわけではなく、規模大きい場合はxmlでも書いている。
+bean定義はいくつか方法があるが、一般的にはxml,Java Config,LDAPなどがある。
 
 1. アノテーションでDIする時のxml記述(共通)
    アノテーションでDIをする場合も、最低限のxml記述が必要。("レガシーspring"の場合)
