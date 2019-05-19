@@ -64,7 +64,6 @@
 ``` 
 ##### [表示イメージ] 
 <font color="red">sample</font>
-
 <font color="0c907d">sample</font>
 
 ### 4. 表 
