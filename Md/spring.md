@@ -1,5 +1,42 @@
 # Springメモ
 
+## 概要
+Springは様々な用途のフレームワークが存在するが、共通するコア機能として「DIコンテア×AOP」がある。
+1. DIコンテナ
+依存性の注入を行うためのコンテナ(Bean(≒インスタンス)管理している)を使用して、オブジェクトの結合度を下げる。
+設定から使用までの大まかなフローは以下の通り。(設定がJavaConfigの場合)
+
+- Configurationクラス(DIコンテナの設定)の準備
+  @Configurationをクラスにつけ、@Beanをつけたインスタンスを返すメソッドを定義したもの。
+
+- ApplicationContext(DIコンテナ)の生成　
+  ApplicationContextインターフェースを実装したクラスをインスタンス化する。
+  (引数にconfigrationクラスを渡す)
+
+- Beanの取得(ApplicationContext.getBean()の使用)
+ 前述のApplicationContext実装クラスのgetBean(クラス名)を使用することで、DIコンテナに登録されBeanを取得する。
+
+#### [用語]
+- Bean
+  DIコンテナに登録するコンポーネントの事。
+  (大抵何かしらのインターフェースを実装しているインスタンス)
+- Bean定義
+  Configurationの事。 代表的なのは以下の３つ
+  - JavaConfigベース(@Configuration)
+  - XMLベース
+  - アノテーションベース(@Component、@ComponentScanの使用)
+
+- ルックアップ
+ DIコンテナからBeanを取得する事。ルックアップにもいくつか種類がある。
+
+
+
+
+1. AOP
+
+
+
+
 ## Bean定義
 spring bootでは設定ファイルなしでも動くが、規模大きい場合はxmlで書いている。xmlの読み込みは、mainメソッドがあるクラスで以下のｱﾉﾃｰｼｮﾝをつける。これで、起動時に設定が読み込まれる。
 - @Configuration
@@ -155,3 +192,57 @@ public class AppConfig{
 
 ## ロギング　
 spring bootでは全ての内部ロギングで"CommonsLogging"を利用している。
+
+
+
+## 認証・認可
+1. LDAP(Lightweight Directory Access Protocol)
+ユーザやコンピュータの情報を集中管理するディレクトリサービスのアクセスに用いるプロトコル。(winのActiveDirectoryみたいな?)
+LDAPクライアントはLDAPサーバ上のデータを「検索・参照」したり、追加・削除・変更などの操作ができる。ただ頻繁なデータ変更や複雑なデータ管理には向かないため、あくまで情報検索・参照がメイン。
+認証情報の保管・検索照合によく使われる。
+
+springで使うときは、以下の様な感じ。
+``` yml
+#[yml]:LDAPサーバの設定
+spring:
+  ldap:
+    embedded:
+      base-dn: dc=springframework,dc=org
+      ldif: classpath:test-server.ldif
+      port: 8389
+```
+``` java
+//@EnabeWebSecurityの使用
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    //JavaConfigで記述
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .anyRequest().fullyAuthenticated()
+                .and()
+            .formLogin();
+    }
+    //AuthenticationManager(認証情報を持つオブジェクト)の設定
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .ldapAuthentication()
+                .userDnPatterns("uid={0},ou=people")
+                .groupSearchBase("ou=groups")
+                .contextSource(contextSource())
+                .passwordCompare()
+                    .passwordEncoder(new LdapShaPasswordEncoder())
+                    .passwordAttribute("userPassword");
+    }
+    //データソース
+    @Bean
+    public DefaultSpringSecurityContextSource contextSource() {
+        return new DefaultSpringSecurityContextSource(Arrays.asList("ldap://localhost:8389/"), "dc=springframework,dc=org");
+    }
+}
+```
+
+
