@@ -78,4 +78,53 @@
    2. 確認窓で「はい」押せば、コミット前の状態に戻る。
    3. コミットヒストリーにリバートのコミットが追加される。(間違えてコミットし、修正したことがわかる)
    4. その後、pushすればリモートにもrevertのコミットが表示される。
+   5. 
+
+
+
+
+
+## カスタム操作の追加
+標準のSource Treeは、gitコマンドの全てをGUI利用できるわけではない。必要に応じて追加する必要がある。  
+追加方法は以下の通り。(※Windowsの場合)
+1. ユーザー/"ユーザー名"/AppData/Local/Atlassian/sourcetree/customactions.xmlを作成　(既にある場合は追記)  
+2. 上記xmlに以下を記述
+```xml
+<?xml version="1.0"?>
+<ArrayOfCustomAction xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CustomAction>
+  　<!--リモートで追跡中のファイルをローカルでのみ追加しないようにする。-->
+    <Caption>ローカルで管理対象外に</Caption>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <Target>git</Target>
+    <Parameters>update-index --skip-worktree $FILE</Parameters>
+  </CustomAction>
+  <CustomAction>
+    <!--管理対象に戻す。-->
+    <Caption>管理対象に戻す</Caption>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <Target>git</Target>
+    <Parameters>update-index --no-skip-worktree $FILE</Parameters>
+  </CustomAction>
+  <CustomAction>
+    <Caption>ローカル変更を無視</Caption>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <Target>git</Target>
+    <Parameters>update-index --assume-unchanged $FILE</Parameters>
+  </CustomAction>
+  <CustomAction>
+    <Caption>ローカル変更の無視を解除</Caption>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <Target>git</Target>
+    <Parameters>update-index --no-assume-unchanged $FILE</Parameters>
+  </CustomAction>
+</ArrayOfCustomAction>
+```
+3. Source Tree再起動
+4. ファイルステータスの作業ツリーのファイル上で「右クリック=>カスタム操作=>xmlに追加した操作」を確認する。
+
    
