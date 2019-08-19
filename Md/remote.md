@@ -5,6 +5,8 @@
 - [SCP:リモートファイル転送](#SCP)
 - [WOL:リモート起動](#WOL)
 - [X-Windows:リモートGUI](#X-Windowsの利用)
+- [VirtualBoxコマンド操作](#VirtualBoxコマンド操作)
+
 
 ## 文字化けする時
 Powershellからリモートにログインした際、文字化けする場合は以下をそれぞれ試してみる。  
@@ -116,3 +118,50 @@ WindowsマシンからリモートのLinuxサーバのGUIを利用する。
    $ firefox &
    ```
 4. xmingでGUIが表示される
+
+## VirtualBoxコマンド操作 
+#### 起動フロー
+1. ホストOSでVirtualBoxを起動 
+2. VirtualBoxをコマンド操作し、ゲストOS(仮想マシン)を起動
+3. ゲストOS上で好きな操作する
+```shell
+//ホストOS側の操作
+$virtualbox
+$vboxmanage startvm VM1 
+
+//ゲストOS側の操作(例)
+$service postgresql-9.5 start
+```
+
+#### 停止フロー
+1. ゲストOSのシャットダウン操作
+2. ホストOSシャットダウン操作
+
+```shell
+//ゲストOS
+$shutdown -h now
+
+//ホストOS
+$shutdown -h now
+```
+
+
+#### コマンド説明
+CUIでVirtualBox関係の操作をする時は`VBoxMange`コマンドを使う。  
+主要なコマンドは以下の通り。
+
+
+
+
+## サービス自動起動
+```shell
+//自動起動有効
+systemctl enabled "サービス名"
+
+//自動起動無効
+systemctl disabled "サービス名"
+
+//自動起動ステータス確認
+sytemctl is-enabled "サービス名"
+
+```
