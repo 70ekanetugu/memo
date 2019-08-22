@@ -191,8 +191,45 @@ saml:
   - インストール　https://www.openam.jp/wp-content/uploads/techtips_vol1.pdf
   - 設定手順　　　https://www.openam.jp/wp-content/uploads/techtips_vol2.pdf
 - OpenAM/SAML（他例)  : https://kfep.jp/openam-news-2016-11-25-3388
-- OpenAM/OpenIG　　　 : https://qiita.com/gzock/items/af6f820b5e872366e853
-    
+- OpenAM/OpenIG　　　 : https://qiita.com/gzock/items/af6f820b5e872366e853  
+
+#### OpenAM環境構築(やってみた)
+環境は以下の通り
+|項目|バージョン|
+|:--|:--|
+|CentOS7||
+|Java|Java1.8.0_222|
+|Tomcat| 9|
+|OpenAM| 13.0.0|
+
+1. CentOS設定  
+以下の通り、各ファイル設定を行う。
+```
+# 「/etc/sysconfig/network」を以下の内容で編集。OpenAMサーバはFQDNである必要がある為
+HOSTNAME = sso1.example.com
+```
+```
+# 「/etc/hosts」hostsファイルの編集。
+127.0.0.1 localhost
+192.168.0.11 sso1.example.com sso1
+```
+```
+# /etc/sysconfig/selinux　でSELinux無効にする。設定後、再起動必要
+SELINUX = disabled
+```
+
+2. Tomcat設定(インストール後)
+Tomcatインストール後、以下の設定を行う。
+```
+
+```
+
+
+3. OpenAMインストール
+    - [FORGEROCK](https://backstage.forgerock.com/downloads/search?q=openam)からOpenAM.warをDL。※DLには会員登録必要。
+    - 
+
+
 ### 2. IDaaS(Identity as a Service)
 クラウド型のシングルサインオンサービスの総称。
 #### IDaaS運用
