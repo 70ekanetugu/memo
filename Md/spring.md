@@ -1,6 +1,13 @@
 # Springメモ
+# 目次
+[1. 概要](#概要)
+[2. DI](#DI)
+[3. MVC](#MVC)
+[4. JDBC/JPA](#JDBC/JPA)
+[5. Security](#Security)
+[6. Cloud](#Cloud)
 
-## 概要
+# 1. 概要
 Springは様々な用途のフレームワークが存在するが、共通するコア機能として「DIコンテア×AOP」がある。
 1. DIコンテナ
 依存性の注入を行うためのコンテナ(Bean(≒インスタンス)管理している)を使用して、オブジェクトの結合度を下げる。
@@ -16,7 +23,7 @@ Springは様々な用途のフレームワークが存在するが、共通す�
 - Beanの取得(ApplicationContext.getBean()の使用)
  前述のApplicationContext実装クラスのgetBean(クラス名)を使用することで、DIコンテナに登録されBeanを取得する。
 
-#### [用語]
+#### 用語
 - Bean
   DIコンテナに登録するコンポーネントの事。
   (大抵何かしらのインターフェースを実装しているインスタンス)
@@ -37,7 +44,7 @@ Springは様々な用途のフレームワークが存在するが、共通す�
 
 
 
-## Bean定義
+### Bean定義
 spring bootでは設定ファイルなしでも動くが、規模大きい場合はxmlで書いている。xmlの読み込みは、mainメソッドがあるクラスで以下のｱﾉﾃｰｼｮﾝをつける。これで、起動時に設定が読み込まれる。
 - @Configuration
 - @ImportResource("xmlファイル名")
@@ -190,12 +197,37 @@ public class AppConfig{
 
 ```
 
-## ロギング　
+### ロギング　
 spring bootでは全ての内部ロギングで"CommonsLogging"を利用している。
 
+# 2. DI
 
 
-## 認証・認可
+# 3. MVC
+
+
+# 4. JDBC/JPA
+### 4.1. データベース接続設定
+```yml
+# SpringBootの場合、application.ymlに以下の設定をする。
+# configでプロパティの読み込みを設定していれば、名称は好きに変えられる。
+spring:
+  datasource: 
+    url: jdbc:postgresql://localhost:5432/DB名
+    driver-class-name: org.postgresql.Driver
+    username: ユーザー名
+    password: パスワード
+```
+### 4.2. Java Config
+```java
+//Web
+
+
+```
+
+
+# 5. Security
+ 認証・認可
 1. LDAP(Lightweight Directory Access Protocol)
 ユーザやコンピュータの情報を集中管理するディレクトリサービスのアクセスに用いるプロトコル。(winのActiveDirectoryみたいな?)
 LDAPクライアントはLDAPサーバ上のデータを「検索・参照」したり、追加・削除・変更などの操作ができる。ただ頻繁なデータ変更や複雑なデータ管理には向かないため、あくまで情報検索・参照がメイン。

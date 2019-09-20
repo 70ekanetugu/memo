@@ -1,9 +1,23 @@
 # Thymeleafメモ
 
 # 目次
+[1. 基本属性](#基本属性)
+[2. テンプレート指定](#テンプレート指定)
 
-# 埋め込み  
-## テンプレートの指定方法
+# 1. 基本属性
+|属性|内容|例|
+|:--|:--|:--|
+|th:|thymeleafの名前空間。||
+|th:text|要素の値をセットする。|`<p th:text="${data}">ここにデータが入る</p>`|
+|th:value|要素のvalue属性に値をセットする。|`<input type="hidden" th:value="${data}"/>`|
+|th:if|条件分岐。trueならこの属性を付けたタグを表示する。子要素にも影響あり。|`<div th:if="${flag}"></div>`|
+|${}? : |三項演算子|`<p th:text="${flag} ? ${data} : null"></p>`|
+|th:each|繰り返し処理。後述のオブジェクトと一緒によく使われる。||
+|th:object|オブジェクトを定義できる。||
+|th:block|疑似ブロック。レンダリング後は、表示されない疑似的なブロックとして利用可能。||
+
+
+# 2. テンプレートの指定方法
 以下の方法がある。  
 また、埋め込みのパスをtiles.xmlに記述しまとめて管理することもできる。
 - templateName  
@@ -17,7 +31,7 @@
 - templateName::fragmentName
   fragment属性の値(名前)を指定。  
 
-## th:include  
+### th:include  
   includeの場合は、子要素として追加される。
 ```html
 <!--parts.html -->
@@ -40,7 +54,7 @@
 </div>
 ```
 
-## th-replace
+### th-replace
  replaceの場合は、要素が入れ替わる。
 ```html
 <!--parts.html -->
@@ -60,7 +74,7 @@
     埋め込むファイル    
 </div>
 ```
-## th:fragment
+### th:fragment
 htmlに複数のパーツを定義する場合に使う。fragument属性を付与した要素を他ファイルに埋め込めるようになる。
 ```html
 <!--parts.html(パーツ定義)-->
@@ -95,7 +109,7 @@ htmlに複数のパーツを定義する場合に使う。fragument属性を付�
 </div>
 ```
 
-## tiles.xml(抜粋)
+### tiles.xml(抜粋)
 紛らわしいけど、慣れれば管理が一括でできて楽そう。
 ```xml
 <tiles-difinitions>
