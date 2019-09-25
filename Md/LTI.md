@@ -9,28 +9,13 @@
 # 1. 概要  
 LTI(Learning Tools Interoperability)とは、[IMS Global Learning Consortium](http://www.imsglobal.org/)(以降IMS)が策定した、LMS(Learning Management System)と学習ツール(何らかの教材やサービスを提供)間で、やり取りする為のプロトコルである。(図１参照)  
 要は、eラーニングシステムで使用される通信規約(通信データ構造等に関する)。
-このLTI仕様はバージョンがあり、詳細は後述のセクションで解説するが、以下の様なものがある。  
-また、LTIが使用されるシステム構成例(図１)も併せて記載する。  
+このLTI仕様はバージョンがあり、詳細は後述のセクションで解説するが、以下の様なものがある。   
 
 |バージョン|関連技術|
 |:--|:--|
 |LTIv1.1.1|OAuth1.0を採用|
 |LTIv1.1.2|OAuth1.0＋v1.1.1のセキュリティ強化版|
 |LTIv1.3|OAuth2.0を採用|
-
-| |
-|:--:|
-|![](./pic/LTI_summary.jpg)|
-|図１.LTI 概要図|
-
-
-|名称|内容|備考|
-|:--|:--|:--|
-|Tool Provider(ツール)|学習ツール(教材)を提供するサーバ|v1.3では"ツール"へと定義変更|
-|Tool Consumer(プラットフォーム)|LMS。ユーザーはLMS経由で学習ツールを使用する|v1.3では"プラットフォーム"へと定義変更|
-|LTI Service|LTIプロトコルの事|この中に何度もリダイレクトによるやり取りがある|
-|User/Instructor/Admin|利用者(ブラウザ)、エンドユーザー||
-
 
 # 2. 関連技術
 ### LMS(Learning Management System)
@@ -77,13 +62,7 @@ LTIはツール側にアクセスして、ツール側のサーバで実行さ�
 OAuth1.0と2.0の互換性はないが、共存は可能である。[https://openid-foundation-japan.github.io/rfc6749.ja.html#anchor3](https://openid-foundation-japan.github.io/rfc6749.ja.html#anchor3)
 クライアントがOAuthサーバーよりアクセストークンを受取り、これを元に認可サーバで認可を受けてリソースを受け取る。
 
-| |
-|:--:|
-|![](./pic/OAuth.jpg)|
-|図2.OAuth2.0 構成図|　
-
-
-上図のフローを文章で書くと以下の通り。  
+フローを文章で書くと以下の通り。  
 1. ユーザーがクライアントアプリへリクエストを投げる。  
 2. クライアントアプリが認可サーバーへ「アクセストークン」発行依頼
 3. 認可サーバーが、ユーザーへ承認依頼(ログイン画面表示)
