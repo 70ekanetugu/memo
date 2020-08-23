@@ -37,13 +37,32 @@
 2. リモートサーバの転送したいポートを入力し、Enterを押下（ここでは"3000"にしたとする)
 3. ローカルブラウザで、localhost:3000にアクセスすると、リモートサーバの3000ポートに転送される。
 
-## Java環境
-「Java IDE Pack」を入れればOK。Springも含めて全て入っている。  
-また、別途setting.json(ユーザー用 or ワークスペース用)に"java_home"を登録する。
+## Java環境構築
+- VSCodeの拡張機能「Java IDE Pack」を入れる。Springも含めて全て入っている。  
+- setting.json(ユーザー全体) or default.code-workspace(ワークスペース用)に"java_home" or "java.configuration.runtimes"を登録する。
+  
 ```json
 {
 //...
+//JAVA_HOMEと同じﾊﾟｽを設定する。
 "java_home": "C:\\Program Files\\Java\\jdk-11.0.2",
 //...
+}
+
+//======================================================
+
+//複数バージョンの設定をする場合は、以下の様に書ける
+"java.configuration.runtimes": [
+    {
+        "name": "JavaSE-1.8",
+        "path": "C:\\Program Files\\Java\\jdk1.8.0_181.jdk",
+        "default": true // デフォルト指定
+    },
+    {
+        "name": "JavaSE-11",
+        "path": "C:\\Program Files\\Java\\jdk-11.0.2",
+    },
+],
+
 }
 ```
