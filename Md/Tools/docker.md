@@ -1,7 +1,6 @@
 # Docker・DockerCompose
 # 目次
 - [Docker](#Docker)
-    - [a](#a)
 - [DockerCompose](#DockerCompose)
 
 # Docker
@@ -68,6 +67,57 @@ Dockerが直接管理しているボリュームか、ホストOS上の任意の
     - Dockerボリュームの指定
 2. Dockerネットワーク作成(デフォルトでよければ不要)
 3. docker runコマンドによるコンテナの生成・実行
+
+## Dockerfile
+1. インフラ構成要素の記述(通常であれば、インフラ設計書やパラメータシートに書く内容)
+ ・ベースになるDockerイメージ
+ ・Dockerコンテナ内で行った操作(コマンド)
+ ・環境変数などの設定
+ ・Dockerコンテナ内で動作させておくデーモン実行
+2. Dockerfileの基本構文　： "命令 引数" ->この書式を羅列する。
+  ①命令一覧
+　・FROM	：ベースイメージの指定。FROM [イメージ名][:タグ名]
+　・RUN　	：ビルド(イメージ生成)時に任意のコマンドを実行。要は、dockerエンジン上のLinuxコマンド？
+		　ex.RUN [コマンド] 	
+　・CMD　　　	：コンテナ実行時のコマンド。(docker run時に指定するような)
+　・LABEL　　	：ラベルを設定。
+　・EXPOSE　　	：ポートのエクスポート(解放)。
+　・ENV　　　 　：環境変数。
+　・ADD　　　	：ファイル/ディレクトリの追加。
+　・COPY　　　	：ファイルのコピー。	COPY [host側ファイル] [イメージ側指定ディレクトリ]
+　・ENTRYPOINT　：docker run時に実行されるコマンド。実行時にCLIから引数を受け取れる。ENTRYPOINT ["パス"]
+　・VOLUME　　	：ボリュームのマウント。
+　・USER　　　	：ユーザーの指定。
+　・WORKDIR　	：作業ディレクトリを指定。ない場合は新しく生成する。 WORKDIR [パス]
+　・ARG		:Dockerfile内で使用できる変数を定義できる。
+　・SHELL 	:デフォルトシェルの設定。
+ ②コメント　
+   #でその行はコメントとなる。
+3. Dockerfileの作成フロー
+　・FROMでベースイメージ指定
+　・必要なミドルウェアをインストール、ユーザーやディレクトリを作成するコマンドの実行。
+　・コンテナのデーモン起動
+4. Dockerfile内コマンドの実行
+　RUN [実行したいコマンド]
+　=>2通りの記述がある。
+  ①Shell形式での記述
+　　 `RUN apt-get install -y nginx` ※nginxのインストール
+　　　=>シェルで実行する。使用するシェルは、Dockerfile内SHELL命令で指定。
+　②Exec形式での記述
+　　 `RUN ["/bin/bash","-c","apt-get install -y nginx"]`
+      =>
+5. $docker buildコマンドでDockerfileを元にイメージを生成する。
+
+
+## Dockerよく使うコマンド
+`$ docker images ls`：イメージ一覧
+`$ docker image inspect イメージ名`：イメージの詳細情報
+`$ docker build -t 生成するイメージ名：タグ名　Dockerfileﾊﾟｽ `：Dockerfileを元にイメージを作成
+`$ docker run -it --name コンテナ名`：イメージを元にコンテナ作成と実行
+`$ docker ps -a`：コンテナ一覧
+`$ docker start コンテナ名`：コンテナを起動
+`$ docker exec -it コンテナ名 実行コマンド`：指定コンテナで指定コマンドを実行
+`$ docker cp コンテナ名：コンテナパス ホストﾊﾟｽ`：コンテナ内のファイルをホストにコピー。逆にすれば、ホスト->コンテナとなる。
 
 
 # DockerCompose
