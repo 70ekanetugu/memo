@@ -141,7 +141,7 @@ composeファイルは、yaml形式で定義する。
     - ボリュームに関する記述
     - ネットワークに関する記述
     - 起動順序の記述　など
-3. docker-compose upコマンドの実行
+3. docker-compose upコマンドの実行 ※`$docker-compose up -d`
     
 ## docker-compose.yml
 docker-compose.ymlの定義について記載する。
@@ -153,7 +153,7 @@ version: '3'
 # services配下に各service名(コンテナ名)として名前空間を定義する。
 services: 
   db: # サービス名。ホスト名として扱える。
-    image: mysql:5.7
+    image: mysql:5.7 # または「build: .」とすれば指定ディレクトリのDockerfileを利用する意味となる。
     restart: always # 再起動条件
     environment: # 起動時の環境変数を設定
       MYSQL_DATABASE: exampledb
@@ -184,7 +184,7 @@ networks:
 ```  
 
 
-ボリュームの定義は以下の3通りがある。
+なお、ボリュームの定義は以下の3通りがある。
 ```yml
 #トップレベルの定義の場合
 volumes:
@@ -206,3 +206,83 @@ services:
       - db_data:/var/lib/postgresql/data 
 ```
 
+## 例：Go開発環境の構築例
+GoコンテナとPostgresコンテナを使った開発環境をセットする。
+```Dockerfile
+# 最新のGo環境
+FROM golang:latest
+# コードを置くディレクトリを作成
+RUN mkdir /go/src/
+# コンテナログイン時の作業ディレクトリを指定
+WORKDIR /go/src/
+# ホストのファイルをコンテナに追加(マウントではない)
+ADD . /go/src/
+```
+
+```yml
+version: '3'
+services:
+  go-app:
+    build: .
+    container_name: go
+    tty: true
+    volumes:
+      - .:/go/src
+    networks:
+      - gonet
+
+  postgresql: 
+    image: postgres:latest
+    container_name: go-postgresql
+    tty: true
+    ports:
+      - 5432:5432
+    volumes: 
+      - ./postgres/init:/docker-entrypoint-initdb.d/ # ここにホストに用意したsqlファイルをマウントするとコンテナ起動時に実行してくれる。複数用意する場合は、ファイル名先頭に「01_ファイル名.sql」「02_ファイル名.sql」とすることで順番に実行してくれる。
+      # - ./pgdata:/var/lib/postgresql/data ←dbデータを永続化する場合はホストのディレクトリにマウント要。
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    hostname: postgres
+    restart: always
+    user: root
+    networks:
+      - gonet
+
+# Goコンテナとpostgresコンテナ用のネットワークを定義
+networks:
+  gonet:
+    driver: bridge
+
+```
+
+## 例：Jenkinsの構築例
+ホスト側に以下のディレクトリを作っておく
+- 「./jenkins_mnt_data」　：Jenkinsのデータをマウントするディレクトリ
+  - `$ chown -R 1000:1000 ./jenkins_mnt_data`：Jenkins内ユーザがUID1000を使うため設定しておく
+
+```yml
+# Jenkinsイメージを使用。「jenkins」にすると古いイメージなので、必ず「jenkins/jenkins」とする事
+version: '3'
+services: 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    tty: true
+    volumes:
+      - ./jenkins_mnt_data:/var/jenkins_home
+    ports:
+      - 8080:8080
+      - 50000:50000
+```  
+
+1. `$docker-compose up -d`でコンテナ起動する。
+2. 「http://localhost:8080」へアクセス
+3. Jenkins初期設定ウィザードで初期パスワードを聞かれる為、「/var/jenkins_home/secrets/initialAdminPassword」 の内容を使う。
+4. プラグインを選択する。(とりあえずはデフォルトでおｋ)
+5. インストール失敗しても何度かリトライすればいけるはず
+6. 管理ユーザ作成を行う
+7. Jenkinsサーバが利用するアドレス指定を行う(Not nowでもおｋ)
+8. 初期設定完了
+9. あとはダッシュボードで色々設定する
