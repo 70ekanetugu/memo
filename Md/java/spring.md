@@ -24,9 +24,8 @@ Springは様々な用途のフレームワークが存在するが、共通す�
  前述のApplicationContext実装クラスのgetBean(クラス名)を使用することで、DIコンテナに登録されBeanを取得する。
 
 #### 用語
-- Bean
-  DIコンテナに登録するコンポーネントの事。
-  (大抵何かしらのインターフェースを実装しているインスタンス)
+- Spring Bean(単にBeanと呼ばれるが、POJOのBeanと区別する為、ここでは頭にSpringとつけた)
+  DIコンテナに登録するコンポーネントの事。(@Component, @Controller, @Service, @Repositoryなど)
 - Bean定義
   Configurationの事。 代表的なのは以下の３つ
   - JavaConfigベース(@Configuration)
@@ -34,10 +33,7 @@ Springは様々な用途のフレームワークが存在するが、共通す�
   - アノテーションベース(@Component、@ComponentScanの使用)
 
 - ルックアップ
- DIコンテナからBeanを取得する事。ルックアップにもいくつか種類がある。
-
-
-
+  DIコンテナから@Autowiredなどを用いてBeanを取得する事。ルックアップにもいくつか種類がある。
 
 1. AOP
 
@@ -225,7 +221,6 @@ spring:
 
 ```
 
-
 # 5. Security
  認証・認可
 1. LDAP(Lightweight Directory Access Protocol)
@@ -276,5 +271,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 ```
+
+
 
 

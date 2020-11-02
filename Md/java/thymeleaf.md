@@ -1,23 +1,47 @@
 # Thymeleafメモ
 
 # 目次
-[1. 基本属性](#基本属性)
-[2. テンプレート指定](#テンプレート指定)
+[基本属性](#基本属性)
+[テンプレート指定](#テンプレート指定)
 
-# 1. 基本属性
+# 基本属性
 |属性|内容|例|
 |:--|:--|:--|
 |th:|thymeleafの名前空間。||
-|th:text|要素の値をセットする。|`<p th:text="${data}">ここにデータが入る</p>`|
+|th:text|要素の値をセットする。|`<p th:text="${data}">ここが${data}の内容で置き換わる</p>`|
 |th:value|要素のvalue属性に値をセットする。|`<input type="hidden" th:value="${data}"/>`|
 |th:if|条件分岐。trueならこの属性を付けたタグを表示する。子要素にも影響あり。|`<div th:if="${flag}"></div>`|
-|${}? : |三項演算子|`<p th:text="${flag} ? ${data} : null"></p>`|
+|th:unless|ifの逆でfalseなら、表示|`<div th:unless="${flag}"></div>`|
 |th:each|繰り返し処理。後述のオブジェクトと一緒によく使われる。||
-|th:object|オブジェクトを定義できる。||
+|th:object|オブジェクトを定義できる。|`th:object="${hoge}"`以降hogeへのアクセスは`*{}で省略できる。`|
 |th:block|疑似ブロック。レンダリング後は、表示されない疑似的なブロックとして利用可能。||
+|${}? : |三項演算子|`<p th:text="${flag} ? ${data} : null"></p>`|
+|and or not !|論理演算子。th:の右辺であれば、${}で囲わなくても使用できる。|`<span th:text="true and false or true and not true or !false"></span>`|
+|> < >= <= != ==|比較演算子||
+|${...}|SpEL式と呼ばれるオブジェクトにアクセスする為の記述。※1||
+|@{...}|リンク式。指定の仕方にもよるが、パスを補完してくれる※2||
+
+※1：SpEL式
+- publicなフィールドやメソッドなら直接参照が可能
+- getXXX()メソッドの場合、プロパティとしてobj.XXXでアクセス可能
+- フィールドなら、obj['フィールド名']でもアクセス可能
+
+※2：リンク式
+- @{foo/bar}：「foo/bar」が生成される。あまり使わない？
+- @{/foo/bar}：「/コンテキストパス/foo/bar」となる。コンテキストパスが保管される。
+- @{/foo/bar(param='value1', param2=${obj.value})}：クエリパラメータを指定できる
+- @{/foo/{pathVal}/bar}：パスに変数を埋め込める
+
+# 暗黙参照オブジェクト
+- ${#httpServletRequest}：HttpServletRequestオブジェクト
+- ${#httpSession}：HttpSessionオブジェクト
+- ${param}：リクエストパラメータ
+- ${session}：sessionの属性にアクセスできる。
+- ${application}：ServletContextの属性を指定できる。${application['attribute_name']} 
 
 
-# 2. テンプレートの指定方法
+
+# テンプレートの指定方法
 以下の方法がある。  
 また、埋め込みのパスをtiles.xmlに記述しまとめて管理することもできる。
 - templateName  
