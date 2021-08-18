@@ -1,14 +1,2 @@
 # Overview  
-各ツール等のコマンドや、ワークフローに関する個人的なメモ書き。  
-  
-  
-### 1. メモリスト
-<dl>
-<dt>[Linux]</dt>
-  <dd>コマンド集</dd>
-<dt>[Git]</dt>
-  <dd>基本フロー及びコマンド集</dd>
-<dt>[Docker]</dt>
-  <dd>基本フロー</dd><dd>コマンド</dd><dd>用語・概説</dd>
-<dt>[Node.js]</dt><dd>基本フロー</dd><dd>コマンド</dd>
-</dl>
+各種メモやまとめを [Wiki](https://github.com/70ekanetugu/memo/wiki) にまとめる。
