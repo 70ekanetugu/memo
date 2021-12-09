@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Audit URLs using Lighthouse
-      - uses: treosh/lighthouse-ci-action@v8
+      - uses: actions/setup-node@v1
         with:
-          urls: |
-            'https://example.com/'
-            'https://example.com/blog'
-          budgetPath: '.github/workflows/lighthouse/budget.json'
+          node-version: 10.x
+      - run: |
+          npm init -y
+          npm install -g @lhci/cli@0.8.x
+          lhci autorun --config='.github/workflows/lighthouse/.lighthouserc.yml'
