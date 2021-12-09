@@ -13,6 +13,6 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v8
         with:
           urls: |
-            https://example.com/
-            https://example.com/blog
-          budgetPath: .github/workflows/lighthouse/budget.json
+            'https://example.com/'
+            'https://example.com/blog'
+          budgetPath: '.github/workflows/lighthouse/budget.json'
