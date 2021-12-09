@@ -10,10 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Audit URLs using Lighthouse
-      - uses: actions/setup-node@v1
+        uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - run: |
+      - name: Run Lighthouse 
+        run: |
           npm init -y
           npm install -g @lhci/cli@0.8.x
           lhci autorun --config='.github/workflows/lighthouse/.lighthouserc.yml'
