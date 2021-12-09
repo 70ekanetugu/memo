@@ -13,7 +13,7 @@ jobs:
       - name: Audit URLs using Lighthouse
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
+          node-version: 14
       - name: Run Lighthouse 
         run: |
           npm init -y
