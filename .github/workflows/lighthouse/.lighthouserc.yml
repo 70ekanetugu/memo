@@ -1,9 +1,4 @@
 ci:
-  collect:
-    # collect options here
-   numberOfRuns: 1
-   urls:
-     - http://example.com
   assert:
     # assert options here
     budgetsFile: .github/workflows/lighthouse/budget.json
