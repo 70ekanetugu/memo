@@ -1,0 +1,19 @@
+# LighthouseでCWVスコア測定を行う
+name: Lighthouse CI
+
+# 手動トリガー
+on: [ workflow_dispatch ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v8
+        with:
+          urls: |
+            https://example.com/
+            https://example.com/blog
+          budgetPath: '.github/lighthouse/budget.json'
+          temporaryPublicStorage: true
